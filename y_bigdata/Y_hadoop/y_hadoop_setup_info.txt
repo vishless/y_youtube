@@ -1,3 +1,5 @@
+NOTE :- Any paths given below are related to my system , Modify them according to your system file structure
+
 ################################# 1) SOFTWARES NEEDED ## START ###########################################################
 
 1) Download Hadoop from official website and extract it
@@ -132,6 +134,12 @@ We have default files for all the above files too in various locations , To find
 		export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 
+
+Note :- In case while starting daemons if any process says JAVA_HOME or any environment variable is not specified 
+		even though you did specify , check the files once again , If your variables are gone then youhave to 
+		first give write permissions to those files or do it directly as sudo
+
+
 ################################# 3) Env variables setup ## End ###########################################################
 
 
@@ -141,7 +149,39 @@ We have default files for all the above files too in various locations , To find
 
 
 
-################################# 4) Start or stop services and monitor ## Start ####################################################
+################################# 4) Start or stop services ## Start ####################################################
+
+1) Format name node :
+	bin/hdfs namenode -format
+
+2) Start all hadoop daemons :
+	sbin/start-all.sh
+
+3) To check all running daemons run below command
+	jps
+
+4) Stop All hadoop daemons :
+	sbin/stop-all.sh
+################################# 4) Start or stop services ## End ####################################################
 
 
-################################# 4) Start or stop services and monitor ## End ####################################################
+
+
+
+################################# 5) Web interfaces for monitoring ## Start ####################################################
+
+1) Web Interface of name node :
+	http://localhost:9870/
+
+2) Web interface of resource manager :
+	http://localhost:8088/cluster
+
+
+
+QUESTION :- How to know these UI addresses 
+AWNSER   :- Generally we would specify these addresses to our convenience in site specific config files mentioned in above second section
+			, but in case you did not specify them in those config files there will be equivalent default files for 
+			all those site specific files . check in them
+
+
+################################# 5) Web interfaces for monitoring ## End ####################################################
