@@ -1,0 +1,103 @@
+##################### DATA SETUP ## START ###################################################################
+    from pyspark.sql import SparkSession
+
+    ss=SparkSession.builder.getOrCreate()
+    df1=ss.createDataFrame([('a1','b1','c1'),('a2','b2','c2')],('A-col','B-col','C-col'))
+    df2=ss.createDataFrame([('aa1','bb1','cc1'),('aa2','bb2','cc2')],('A-col','B-col','C-col'))
+
+##################### DATA SETUP ## END ###################################################################
+
+
+
+
+
+
+##################### DATAFRAME METADATA ## START ###################################################################
+
+1) To get schema information of dataframe
+    df1.printSchema()
+
+2) To get only columns of dataframe
+    df1.columns
+
+##################### DATAFRAME METADATA ## START ###################################################################
+
+
+
+
+
+
+
+
+##################### SINGLE DF OPERATIONS ## START ###################################################################
+
+1) SELECT FEW COLUMNS
+
+    df1.select("A-col","B-col").show()
+    df1.select(df.A-col,df.B-col).show()
+    df1.select(df["A-col"],df["B-col"]).show()
+
+    --> By using col() function
+    from pyspark.sql.functions import col
+    df1.select(col("A-col"),col("B-col")).show()
+
+    --> select columns by index
+    df1.select(df1.columns[2:4]).show(3)
+
+
+
+2) CHNAGE NAMES OF SELECTED COLUMNS
+     from pyspark.sql.functions import col
+     df1 = df1.select(col("A-col").alias("A"), col("B-col").alias("B"))
+
+
+
+
+
+3) APPLY DISTINCT 
+    df1.select(col('A')).distinct().show()
+
+
+
+
+###### AGGREGATE FUNCTIONS
+
+
+
+
+###### IF ELSE in DATAFRAME DATA
+
+
+
+
+###### FILTER DATA
+
+##################### SINGLE DF OPERATIONS  ## END ###################################################################
+
+
+##################### JOINS ## START ###################################################################
+
+###### INNER JOIN
+
+
+
+
+###### LEFT JOIN
+
+
+
+
+###### RIGHT JOIN
+
+
+
+
+###### OUTER JOIN
+
+
+
+
+###### CROSS JOIN
+
+
+##################### JOINS ## END ###################################################################
