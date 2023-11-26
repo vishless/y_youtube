@@ -1,9 +1,34 @@
+############ Install PYSPARK and find out where the library is installed in  ## START ###################################################################
+
+1) Install pyspark using terminal
+    pip install pyspark 
+
+2) In case you want to see code inside the library and want to open its installed locations , run below python code
+    import pyspark
+    fp=pyspark.__file__
+    print(fp)
+
+3) Find out the "pyspark WEBUI" URL for your sparksessions
+
+    After your sparkContext or SparkSession is running , execute below command inside your python terminal
+        from pyspark.sql import SparkSession
+        ss=SparkSession.builder.getOrCreate()
+        ss.sparkContext.uiWebUrl
+
+############ Install PYSPARK and find out where the library is installed in ## END ###################################################################
+
+
+
+
+
+
 ##################### DATA SETUP ## START ###################################################################
+ 
     from pyspark.sql import SparkSession
 
     ss=SparkSession.builder.getOrCreate()
-    df1=ss.createDataFrame([('a1','b1','c1'),('a2','b2','c2')],('A-col','B-col','C-col'))
-    df2=ss.createDataFrame([('aa1','bb1','cc1'),('aa2','bb2','cc2')],('A-col','B-col','C-col'))
+    students_df=ss.createDataFrame( [(1,'rama','physics'),(2,'raju','maths'),(1,'rama','maths')]  ,  ('ID','name','subject'))
+    results_df=ss.createDataFrame( [(1,'physics',94),(2,'maths',95),(1,'maths',90)]  ,  ('ID','subject','marks_scored'))
 
 ##################### DATA SETUP ## END ###################################################################
 
@@ -12,56 +37,69 @@
 
 
 
-##################### DATAFRAME METADATA ## START ###################################################################
+##################### To see DATAFRAME or its METADATA ## START ###################################################################
 
-1) To get schema information of dataframe
+1) To see dataframe table
+    df1.show(n)                --->>> "n" will be the first number of rows you want to see
+    df1.show(n,truncate=False) --->>> To show column data without truncating it to any length
+    df1.show(n,truncate=x)     --->>> "x" will be the length of the truncate you need on column values
+
+2) To get schema information of dataframe
     df1.printSchema()
 
-2) To get only columns of dataframe
+3) To get only columns of dataframe
     df1.columns
 
-##################### DATAFRAME METADATA ## START ###################################################################
+##################### To see DATAFRAME or its METADATA ## END ###################################################################
 
 
 
 
 
 
+##################### SINGLE DATAFRAME OPERATIONS ## START ###################################################################
+
+###### COULUMN SELECTION
+
+    1) SELECT FEW COLUMNS
+
+        1.1) Most used way 
+
+                df1.select("A-col","B-col").show()
+                df1.select(df1["A-col"],df1["B-col"]).show()
+
+                df1.select(df1.A-col,df1.B-col).show()       ---->>> Dont use this syntax
+                Reason : Even though this  " df1.select(df1.A-col,df1.B-col).show() " works for simple column names ,
+                        for A-col it gets confused as if to do A minus col so its better to avoid this syntax
+            
+        1.2) By using col() function
+
+                from pyspark.sql.functions import col
+                df1.select(col("A-col"),col("B-col")).show()
+
+        1.3) select columns by index
+
+                df1.select(df1.columns[2:4]).show(3)
 
 
-##################### SINGLE DF OPERATIONS ## START ###################################################################
+    2) CHANGE NAMES OF SELECTED COLUMNS
 
-1) SELECT FEW COLUMNS
+        df3 = df1.select(df1["A-col"].alias("A"), df1["B-col"].alias("B"))
 
-    df1.select("A-col","B-col").show()
-    df1.select(df.A-col,df.B-col).show()
-    df1.select(df["A-col"],df["B-col"]).show()
 
-    --> By using col() function
-    from pyspark.sql.functions import col
-    df1.select(col("A-col"),col("B-col")).show()
+    3) APPLY DISTINCT 
 
-    --> select columns by index
-    df1.select(df1.columns[2:4]).show(3)
+        df1.select(df1['A-col'] , df1['B-col']).distinct().show()
 
 
 
-2) CHNAGE NAMES OF SELECTED COLUMNS
-     from pyspark.sql.functions import col
-     df1 = df1.select(col("A-col").alias("A"), col("B-col").alias("B"))
-
-
-
-
-
-3) APPLY DISTINCT 
-    df1.select(col('A')).distinct().show()
-
-
+###### COULUMN TYPES AND THEIR CONVERSIONS
 
 
 ###### AGGREGATE FUNCTIONS
+1) Sum of values in a column :
 
+    df1.groupBy(df1['col-A'],df1['col-B']).sum('col-c','col-d').show()
 
 
 
@@ -72,7 +110,11 @@
 
 ###### FILTER DATA
 
-##################### SINGLE DF OPERATIONS  ## END ###################################################################
+##################### SINGLE DATAFRAME OPERATIONS  ## END ###################################################################
+
+
+
+
 
 
 ##################### JOINS ## START ###################################################################
