@@ -61,35 +61,47 @@
 
 ###### COULUMN SELECTION
 
-    1) SELECT FEW COLUMNS
+1) SELECT FEW COLUMNS
 
-        1.1) Most used way 
+    1.1) Most used way 
 
-                df1.select("A-col","B-col").show()
-                df1.select(df1["A-col"],df1["B-col"]).show()
+            df1.select("A-col","B-col").show()
+            df1.select(df1["A-col"],df1["B-col"]).show()
 
-                df1.select(df1.A-col,df1.B-col).show()       ---->>> Dont use this syntax
-                Reason : Even though this  " df1.select(df1.A-col,df1.B-col).show() " works for simple column names ,
-                        for A-col it gets confused as if to do A minus col so its better to avoid this syntax
-            
-        1.2) By using col() function
+            df1.select(df1.A-col,df1.B-col).show()       ---->>> Dont use this syntax
+            Reason : Even though this  " df1.select(df1.A-col,df1.B-col).show() " works for simple column names ,
+                    for A-col it gets confused as if to do A minus col so its better to avoid this syntax
+        
+    1.2) By using col() function
 
-                from pyspark.sql.functions import col
-                df1.select(col("A-col"),col("B-col")).show()
+            from pyspark.sql.functions import col
+            df1.select(col("A-col"),col("B-col")).show()
 
-        1.3) select columns by index
+    1.3) select columns by index
 
-                df1.select(df1.columns[2:4]).show(3)
-
-
-    2) CHANGE NAMES OF SELECTED COLUMNS
-
-        df3 = df1.select(df1["A-col"].alias("A"), df1["B-col"].alias("B"))
+            df1.select(df1.columns[2:4]).show(3)
 
 
-    3) APPLY DISTINCT 
+2) CHANGE NAMES OF SELECTED COLUMNS
 
-        df1.select(df1['A-col'] , df1['B-col']).distinct().show()
+    df3 = df1.select(df1["A-col"].alias("A") , df1["B-col"].alias("B"))
+
+    2.1) In some cases where you are doing aggregate operations and you want to alias the column header
+            which comes as "agg_func(col-c)" , you could use either of the below two ways (preferably second)
+
+            2.1.1) First way :
+
+                            df_temp = df1.groupBy('col-A','col-B').max('col-C').show()
+                            df2 = df_temp.select(df_temp['max(col-C)'].alias('your_preferred_name'))
+
+            2.1.2) In case you dont want to create df2 just to rename , and do renaming in one line , then use below :
+
+                            from pyspark.sql.functions import col
+                            df1.groupBy('col-A','col-B').max('col-C').select(col('max(col-C)').alias('your-preferred-name')).show()
+
+3) APPLY DISTINCT 
+
+    df1.select(df1['A-col'] , df1['B-col']).distinct().show()
 
 
 
@@ -97,9 +109,42 @@
 
 
 ###### AGGREGATE FUNCTIONS
+Note : Import this module to have these aggregate functions running
+       from pyspark.sql.functions import *
+
 1) Sum of values in a column :
 
     df1.groupBy(df1['col-A'],df1['col-B']).sum('col-c','col-d').show()
+
+2) count of values in a column :
+
+    df1.groupBy(df1['col-A'],df1['col-B']).count().show()
+
+3) Minimum and Maximum of a column
+
+    df1.groupBy(df1['col-A'],df1['col-B']).min('col-c').show()
+    df1.groupBy(df1['col-A'],df1['col-B']).max('col-c').show()
+
+
+###### WINDOW FUNCTIONS
+Problem statement :: when you are doing aggregate operations you will be able to only retrive the columns 
+                     on which groupby was performed and the aggregate function column .
+                     But in case if you also want to display some other non group by columns you would have to 
+                     go through the hastle of joining resultant dataframe with source data frame and then obtain
+                     those non groupby columns 
+
+Solution given by WINDOW functions :: Even though you are selecting multiple columns , it lets you decide on 
+                                      which window of columns you want to apply your aggregate functions.
+                                      and also since we have other columns along with group by columns , the output
+                                      will come with all the number of rows as previous to this operation
+
+
+1) Row number over certain window :
+
+    
+                    
+
+
 
 
 
