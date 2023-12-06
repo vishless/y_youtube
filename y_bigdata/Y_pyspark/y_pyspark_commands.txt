@@ -139,18 +139,29 @@ Solution given by WINDOW functions :: Even though you are selecting multiple col
                                       will come with all the number of rows as previous to this operation
 
 
+0) Import below modules and create a window over certain columns as below :
+
+    from pyspark.sql.window import Window
+    from pyspark.sql.functions import *
+    windowSpec  = Window.partitionBy("col-A").orderBy("col-B")
+
 1) Row number over certain window :
 
-    
-                    
+    df1.withColumn("row_number",row_number().over(windowSpec))
 
+2) Ranking data in a partitions created by "col-A" based on values in "col-B"
 
+    df1.withColumn("rank",rank().over(windowSpec))
 
+3) If you want to use aggregate functions along with window functionality
 
-
-###### IF ELSE in DATAFRAME DATA
-
-
+    df1.withColumn("row",row_number().over(windowSpec)) \
+        .withColumn("avg", avg(col("salary")).over(windowSpecAgg)) \
+        .withColumn("sum", sum(col("salary")).over(windowSpecAgg)) \
+        .withColumn("min", min(col("salary")).over(windowSpecAgg)) \
+        .withColumn("max", max(col("salary")).over(windowSpecAgg)) \
+        .where(col("row")==1).select("department","avg","sum","min","max") \
+        .show()
 
 
 ###### FILTER DATA
