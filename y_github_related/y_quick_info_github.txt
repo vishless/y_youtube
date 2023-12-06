@@ -7,8 +7,11 @@
 
 4) initialize an existing directory as a Git repository
    git init
-5) retrieve an entire repository from a hosted location via UR
-   git clone [url]
+5) Clone an existing Remote repository into local repository
+      git clone <url>
+   Clone a particular branch of repo instead of master into local from remote
+      git clone -b <branch_name> <repo_url>
+
 
 
 GIT can be thought of as below :
