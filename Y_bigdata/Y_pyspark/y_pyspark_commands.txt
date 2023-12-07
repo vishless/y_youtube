@@ -1,3 +1,4 @@
+SPARK -->> 3.x version
 ############ Install PYSPARK and find out where the library is installed in  ## START ###################################################################
 
 1) Install pyspark using terminal
@@ -111,9 +112,6 @@
 
 
 
-###### COULUMN TYPES AND THEIR CONVERSIONS
-
-
 ###### AGGREGATE FUNCTIONS
 Note : Import this module to have these aggregate functions running
        from pyspark.sql.functions import *
@@ -178,6 +176,25 @@ Solution given by WINDOW functions :: Even though you are selecting multiple col
 2) Where is an alias for filter
 
 ##################### SINGLE DATAFRAME OPERATIONS  ## END ###################################################################
+
+
+
+
+
+
+##################### Data frame COLUMN Data types  ## START ###################################################################
+
+1) Import statement to get DATA TYPES
+    from pyspark.sql.types import *
+
+2) To change Column types from one to another 
+    df2 = df1.withColumn("col_A",df1["col_A"].cast(StringType())) 
+
+
+
+
+##################### Data frame COLUMN Data types  ## END ###################################################################
+
 
 
 
