@@ -183,6 +183,7 @@ Solution given by WINDOW functions :: Even though you are selecting multiple col
 
 
 
+
 ##################### Run actual Sql queries in pyspqrk ## START ###################################################################
 
 from pyspark.sql import SparkSession
@@ -200,6 +201,7 @@ output_as_df.show()
 
 
 
+
 ##################### DATA frame collect() vs coallesce() vs cache() ## START ###################################################################
 
 1) df.cache() --->>> what does it do 
@@ -208,15 +210,19 @@ output_as_df.show()
         multiple times
 
 2) df.collect() --->>> what does it do  (Below explanation could be wrong)
+   df.collectList() ---->>> outputs as LIST while above gives as ARRAy
         As spark run the computation code or logic seperately in all executor nodes for the data it has there ,
         Some times there could be a scenario where the logic needs to take a decision based on data collectively 
-        as a whole and we have to collect data from executor nodes to driver nodes
+        as a whole and we have to collect data from executor nodes to driver nodes.
+
+        Need to search more for this exact use!
 
 3) df.coalesce(n)  --->>> "n" is number of partitions to reduce to
         "data frame actions " like write data to CSV often stores data into multiple files based on partitions 
         sometimes you want it to store in a single file irrespective of partition
 
 ##################### DATA frame collect() vs coallesce() vs cache()  ## END ###################################################################
+
 
 
 
@@ -232,6 +238,9 @@ output_as_df.show()
      Logical Plan - to check syntax and semantics errors and this plan before actually using actual reources
      Physical plan - based on using actual resources
 ##################### Performance optimization tools ## End ###################################################################
+
+
+
 
 
 
