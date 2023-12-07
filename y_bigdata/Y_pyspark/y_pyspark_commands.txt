@@ -172,7 +172,54 @@ Solution given by WINDOW functions :: Even though you are selecting multiple col
 
 ###### FILTER DATA
 
+1) Filter based on a condition :
+        df1.filter("col-a">30) 
+
+2) Where is an alias for filter
+
 ##################### SINGLE DATAFRAME OPERATIONS  ## END ###################################################################
+
+
+
+
+
+##################### Run actual Sql queries in pyspqrk ## START ###################################################################
+
+from pyspark.sql import SparkSession
+ss = SparkSession.builder.appName("Running SQL Queries in PySpark").getOrCreate()
+
+my_df = ss.read.csv("Data path")
+my_df.createOrReplaceTempView("my_df_temp_view")
+
+output_as_df = ss.sql("select * from my_df_temp_view where some condition")  ---->>> query can be anything inside
+output_as_df.show()
+
+##################### Run actual Sql queries in pyspqrk  ## END ###################################################################
+
+
+
+
+
+##################### DATA frame collect() vs coallesce() vs cache() ## START ###################################################################
+
+1) df.cache() --->>> what does it do 
+        Suppose we have a "data frame transformation" that is is being invoked during multiple "dataframe actions" 
+        then we can make that data frame result cached in memory with out having to go through same "tranformation" 
+        multiple times
+
+2) df.collect() --->>> what does it do  (Below explanation could be wrong)
+        As spark run the computation code or logic seperately in all executor nodes for the data it has there ,
+        Some times there could be a scenario where the logic needs to take a decision based on data collectively 
+        as a whole and we have to collect data from executor nodes to driver nodes
+
+3) df.coalesce(n)  --->>> "n" is number of partitions to reduce to
+        "data frame actions " like write data to CSV often stores data into multiple files based on partitions 
+        sometimes you want it to store in a single file irrespective of partition
+
+##################### DATA frame collect() vs coallesce() vs cache()  ## END ###################################################################
+
+
+
 
 
 ##################### Performance optimization tools ## START ###################################################################
