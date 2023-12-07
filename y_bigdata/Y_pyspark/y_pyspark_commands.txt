@@ -3,14 +3,14 @@
 1) Install pyspark using terminal
     pip install pyspark 
 
-2) In case you want to see code inside the library and want to open its installed locations , run below python code
+2) In case you want to see source code for pyspark library and want to open its installed locations , run below python code
     import pyspark
     fp=pyspark.__file__
     print(fp)
 
 3) Find out the "pyspark WEBUI" URL for your sparksessions
 
-    After your sparkContext or SparkSession is running , execute below command inside your python terminal
+    After your SparkSession is running , execute below command inside your python terminal
         from pyspark.sql import SparkSession
         ss=SparkSession.builder.getOrCreate()
         ss.sparkContext.uiWebUrl
@@ -81,6 +81,12 @@
 
             df1.select(df1.columns[2:4]).show(3)
 
+    1.4) Omit some columns from data frame 
+
+            df2 = df1.drop('col1','col2',...,'coln')  ---->>> df1 will still have them 
+            df2 = df1.dropDuplicates()                ---->>> To ddrop duplicates by considering only few columns menton them in paranthesis
+            df2 = df1.dropna()                        ---->>> If any column contains null values drops the entire row
+
 
 2) CHANGE NAMES OF SELECTED COLUMNS
 
@@ -114,7 +120,7 @@ Note : Import this module to have these aggregate functions running
 
 1) Sum of values in a column :
 
-    df1.groupBy(df1['col-A'],df1['col-B']).sum('col-c','col-d').show()
+    df1.groupBy(df1['col-A'],df1['col-B']).sum('col-c','col-d').show()   ----->>>> Note : its not col-c+col-d it adds up all values of col-c and col-d in themselves
 
 2) count of values in a column :
 
@@ -169,7 +175,16 @@ Solution given by WINDOW functions :: Even though you are selecting multiple col
 ##################### SINGLE DATAFRAME OPERATIONS  ## END ###################################################################
 
 
+##################### Performance optimization tools ## START ###################################################################
 
+1) You want to see the entire plan of how the resultant data frame is being created :
+        df1.explain(<mode>) ---->>> replace <mode> with options available or leave empty 
+
+2) Spark uses "catalyst" optimizer which chooses best plan to execute
+3) Could be wrong 
+     Logical Plan - to check syntax and semantics errors and this plan before actually using actual reources
+     Physical plan - based on using actual resources
+##################### Performance optimization tools ## End ###################################################################
 
 
 
